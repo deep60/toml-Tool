@@ -1,0 +1,72 @@
+[package]
+name = "tomlTool"
+version = "0.1.0"
+edition = "2021"
+author = ["P Deepanshu <deep6060p@gmail.com>"]
+license = "MIT"
+repository = "https:://github.com/deep60/tomlTool"
+description = "A command line tool for extracting information from a TOML file."
+
+[dependencies]
+toml = "0.8.9"
+clap = { version = "4.5.9", features = ["derive", "usage", "help"], optional = true }
+colored = { version = "2.2.0", optional = true }
+thiserror = "2.0.9"
+console = { version = "0.15.8", features = ["windows-console-colors"], optional = true }
+anyhow = { version = "1.0.9", features = ["backtrace"], optional = true }
+bat = { version = "0.24.0", optional = true, default-features = false, features = ["build-assets", "regex-fancy"] }
+
+[dependencies.serde_json]
+version = "1.0.120"
+feature = ["indexmap", "preserve_order", "raw_value", "unbounded_depth", ]
+optional = true
+
+[features]
+default = ["json", "bin"]
+json = ["dep:serde_json"]
+syntax_highlighting = ["bin", "dep:bat", "dep:console"]
+bin = ["dep:clap", "dep:anyhow"]
+color = ["dep:colored"]
+
+[lib]
+name = "to"
+test = true
+docktest = true
+doc = true
+
+[[bin]]
+name = "to"
+test = false
+required-features = ["bin"]
+
+[package.metadata.binstall]
+pkg-fmt = "tgz"
+
+[package.metadata.binstall.overrides.x86_64-unknown-linux-gnu]
+pkg-url = "{ repo }/releases/download/{ version }/{ name }.amd64{ archive-suffix }"
+
+[package.metadata.binstall.overrides.aarch64-unknown-linux-gnu]
+pkg-url = "{ repo }/releases/download/{ version }/{ name }.arm64{ archive-suffix }"
+
+[package.metadata.binstall.overrides.armv7-unknown-linux-gnueabi]
+pkg-url = "{ repo }/releases/download/{ version }/{ name }.armv7{ archive-suffix }"
+
+[package.metadata.binstall.overrides.armv7-unknown-linux-gnueabihf]
+pkg-url = "{ repo }/releases/download/{ version }/{ name }.armv7hf{ archive-suffix }"
+
+[package.metadata.binstall.overrides.x86_64-unknown-linux-musl]
+pkg-url = "{ repo }/releases/download/{ version }/{ name }.amd64{ archive-suffix }"
+
+[package.metadata.binstall.overrides.aarch64-unknown-linux-musl]
+pkg-url = "{ repo }/releases/download/{ version }/{ name }.arm64{ archive-suffix }"
+
+[package.metadata.binstall.overrides.armv7-unknown-linux-musleabi]
+pkg-url = "{ repo }/releases/download/{ version }/{ name }.armv7{ archive-suffix }"
+
+[package.metadata.binstall.overrides.armv7-unknown-linux-musleabihf]
+pkg-url = "{ repo }/releases/download/{ version }/{ name }.armv7hf{ archive-suffix }"
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
